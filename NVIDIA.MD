@@ -58,7 +58,7 @@ wget -c https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cud
 
 This is where we get the CUDA developer toolkit and samples onto the system. Just use sh to run the shell script (runfile),
 ```
-sudo sh cuda_9.2.88_396.26_linux.run
+sudo sh cuda_10.1.168_418.67_linux.run
 ```
 
 You will be asked several questions. Here are my answers, (after accepting the EULA),
