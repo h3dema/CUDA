@@ -27,3 +27,28 @@ Now you can reboot!
 ```
 sudo shutdown -r Now
 ```
+
+
+# Install CUDA "dependencies"
+
+There are a few dependencies that get installed when you run the CUDA deb file but, since we are not going to use the deb file, you will want to install them separately. It's simple since we can get what's needed with just four package installs,
+
+```
+sudo apt-get install freeglut3 freeglut3-dev libxi-dev libxmu-dev
+```
+
+# Get the CUDA "run" file installer
+
+Go to the [CUDA Zone](https://developer.nvidia.com/cuda-zone) and click the Download Now button. 
+Then click the link buttons until you get the your configuration.
+* Operating system: linux
+* Architecture: x86_64
+* Distribution: Ubuntu
+* Version: 17.10
+* Instaler type: runfile (local)
+
+
+
+
+
+sudo sh cuda_9.2.88_396.26_linux.run
