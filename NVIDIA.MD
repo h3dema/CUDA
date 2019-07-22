@@ -47,6 +47,11 @@ Then click the link buttons until you get the your configuration.
 * Version: 18.04
 * Instaler type: runfile (local)
 
+This setup allows you to download
+
+```
+wget -c https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_418.67_linux.run
+```
 
 
 # Run the "runfile" to install the CUDA toolkit and samples
