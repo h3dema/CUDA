@@ -1,4 +1,4 @@
-# Install the NVIDIA display driver on Ubutn 18
+# Install the NVIDIA display driver on Ubuntu 18
 
 There are a few methods for installing the proprietary NVIDIA display driver. 
 For Ubuntu installs the one I recommend is to install the latest driver by adding the the graphics driver ppa repository.
@@ -44,8 +44,9 @@ Then click the link buttons until you get the your configuration.
 * Operating system: linux
 * Architecture: x86_64
 * Distribution: Ubuntu
-* Version: 17.10
+* Version: 18.04
 * Instaler type: runfile (local)
+
 
 
 # Run the "runfile" to install the CUDA toolkit and samples
