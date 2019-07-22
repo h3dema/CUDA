@@ -48,7 +48,36 @@ Then click the link buttons until you get the your configuration.
 * Instaler type: runfile (local)
 
 
+# Run the "runfile" to install the CUDA toolkit and samples
 
-
-
+This is where we get the CUDA developer toolkit and samples onto the system. Just use sh to run the shell script (runfile),
+```
 sudo sh cuda_9.2.88_396.26_linux.run
+```
+
+You will be asked several questions. Here are my answers, (after accepting the EULA),
+
+`
+You are attempting to install on an unsupported configuration. Do you wish to continue?
+(y)es/(n)o [ default is no ]: y
+
+Install NVIDIA Accelerated Graphics Driver for Linux-x86_64 396.26?
+(y)es/(n)o/(q)uit: n
+
+Install the CUDA 9.2 Toolkit?
+(y)es/(n)o/(q)uit: y
+
+Enter Toolkit Location
+ [ default is /usr/local/cuda-9.2 ]:
+
+Do you want to install a symbolic link at /usr/local/cuda?
+(y)es/(n)o/(q)uit: y
+
+Install the CUDA 9.2 Samples?
+(y)es/(n)o/(q)uit: y
+
+Enter CUDA Samples Location
+ [ default is /home/kinghorn ]: /usr/local/cuda-9.2
+ `
+ 
+ 
