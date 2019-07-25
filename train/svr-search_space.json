@@ -1,0 +1,10 @@
+{
+    "svm_type":{"_type":"choice","_value":["epsilon-SVR", "nu-SVR"]},
+    "kernel_type":{"_type":"choice","_value":["linear", "polynomial", "radial basis", "sigmoid"]},
+    "degree":{"_type":"randint","_value":[1, 10]},
+    "gamma":{"_type":"uniform","_value":[1e-20, 0.99]},
+    "coef0":{"_type":"uniform","_value":[0, 100]},
+    "cost":{"_type":"loguniform","_value":[1, 10000]},
+    "nu":{"_type":"uniform","_value":[0, 1]},
+    "svr_epsilon":{"_type":"uniform","_value":[0, 1]}
+}

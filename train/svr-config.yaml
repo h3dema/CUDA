@@ -1,0 +1,17 @@
+authorName: h3dema
+experimentName: libSVM-Cuda
+trialConcurrency: 1
+maxExecDuration: 24h
+maxTrialNum: 1
+trainingServicePlatform: local
+searchSpacePath: svr-search_space.json
+useAnnotation: false
+logDir: /home/winet/CUDA/train/experiments
+tuner:
+  builtinTunerName: TPE
+  classArgs:
+    optimize_mode: minimize
+trial:
+  command: python3 run.py --debug --output /home/winet/CUDA/train/output --dataset /home/winet/CUDA/train/train_dataset.dat
+  codeDir: .
+  gpuNum: 0
