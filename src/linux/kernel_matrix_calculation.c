@@ -1,5 +1,15 @@
+/**
+ old includes: for cuda v 5.5
+
 #include "/usr/local/cuda-5.5/include/cuda_runtime.h"
 #include "/usr/local/cuda-5.5/include/cublas_v2.h"
+
+ */
+
+#include "/usr/local/cuda-10.1/include/cuda_runtime.h"
+#include "/usr/local/cuda-10.1/include/cublas_v2.h"
+
+
 
 // Scalars
 const float alpha = 1;
@@ -12,7 +22,7 @@ void ckm( struct svm_problem *prob, struct svm_problem *pecm, float *gamma  )
 	double g_val = *gamma;
 
 	long int nfa;
-	
+
 	int len_tv;
 	int ntv;
 	int i_v;
@@ -27,15 +37,15 @@ void ckm( struct svm_problem *prob, struct svm_problem *pecm, float *gamma  )
 	float *tva, *vtm, *DP;
 	float *g_tva = 0, *g_vtm = 0, *g_DotProd = 0;
 
-	cudaError_t cudaStat;   
+	cudaError_t cudaStat;
 	cublasHandle_t handle;
-	
+
 	status = cublasCreate(&handle);
 
 	len_tv = prob-> x[0].dim;
 	ntv   = prob-> l;
 
-	nfa = len_tv * ntv; 
+	nfa = len_tv * ntv;
 
 	tva = (float*) malloc ( len_tv * ntv* sizeof(float) );
 	vtm = (float*) malloc ( len_tv * sizeof(float) );
@@ -48,13 +58,13 @@ void ckm( struct svm_problem *prob, struct svm_problem *pecm, float *gamma  )
 	v_f_g  = (double*) malloc ( ntv * sizeof(double) );
 
 	for ( i_r = 0; i_r < ntv ; i_r++ )
-	{				 
-		for ( i_c = 0; i_c < len_tv; i_c++ ) 
+	{
+		for ( i_c = 0; i_c < len_tv; i_c++ )
 			tva[i_r * len_tv + i_c] = (float)prob-> x[i_r].values[i_c];
 	}
 
 	cudaStat = cudaMalloc((void**)&g_tva, len_tv * ntv * sizeof(float));
-	
+
 	if (cudaStat != cudaSuccess) {
 		free( tva );
 		free( vtm );
@@ -64,8 +74,8 @@ void ckm( struct svm_problem *prob, struct svm_problem *pecm, float *gamma  )
 		free( tv_sq );
 
 		cudaFree( g_tva );
-		cublasDestroy( handle );	
-	
+		cublasDestroy( handle );
+
 		fprintf (stderr, "!!!! Device memory allocation error (A)\n");
 		getchar();
 		return;
@@ -81,7 +91,7 @@ void ckm( struct svm_problem *prob, struct svm_problem *pecm, float *gamma  )
 
 	// Copy cpu vector to gpu vector
 	status = cublasSetVector( len_tv * ntv, sizeof(float), tr_ar, 1, g_tva, 1 );
-    
+
 	free( tr_ar );
 
 	for( i_v = 0; i_v < ntv; i_v++ )
@@ -96,20 +106,20 @@ void ckm( struct svm_problem *prob, struct svm_problem *pecm, float *gamma  )
 	for ( trvei = 0; trvei < ntv; trvei++ )
 	{
 		status = cublasSetVector( len_tv, sizeof(float), &tva[trvei * len_tv], 1, g_vtm, 1 );
-		
+
 		status = cublasSgemv( handle, CUBLAS_OP_N, ntv, len_tv, &alpha, g_tva, ntv , g_vtm, 1, &beta, g_DotProd, 1 );
 
 		status = cublasGetVector( ntv, sizeof(float), g_DotProd, 1, DP, 1 );
 
 		for ( i_c = 0; i_c < ntv; i_c++ )
 			v_f_g[i_c] = exp( -g_val * (tv_sq[trvei] + tv_sq[i_c]-((double)2.0)* (double)DP[i_c] ));
-		
+
 
 		pecm-> x[trvei].values[0] = trvei + 1;
-		
+
 		for ( i_c = 0; i_c < ntv; i_c++ )
-			pecm-> x[trvei].values[i_c + 1] = v_f_g[i_c];				
-		
+			pecm-> x[trvei].values[i_c + 1] = v_f_g[i_c];
+
 
 	}
 
