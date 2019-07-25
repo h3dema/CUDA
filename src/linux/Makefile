@@ -107,7 +107,7 @@ ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
 
 # new ones
 INCLUDES  := -I/usr/local/cuda-10.1/include
-INCLUDES  := -I/usr/local/cuda-10.1/samples/common/inc
+INCLUDES  += -I/usr/local/cuda-10.1/samples/common/inc
 LIBRARIES := -L/usr/local/cuda-10.1/lib64
 
 
@@ -128,24 +128,30 @@ GENCODE_FLAGS   := $(GENCODE_SM10) $(GENCODE_SM20) $(GENCODE_SM30)
 ################################################################################
 
 
+TARGET_DIR := "bin"
+
 # Target rules
 all: build
 
 build: svm-train-gpu
+	@echo "Ok"
 
+svm-train.o: svm-train.c
+	$(NVCC) $(INCLUDES) -o $@ $^ -c 
+	
 svm-train-gpu.o: svm.cpp svm-train.o
 	$(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
 svm-train-gpu: svm.o svm-train.o
-	$(NVCC) $(ALL_LDFLAGS) -o $@ $+ $(LIBRARIES)
-	mkdir -p /bin/$(OS_ARCH)/$(OSLOWER)/$(TARGET)$(if $(abi),/$(abi))
-	cp $@ /bin/$(OS_ARCH)/$(OSLOWER)/$(TARGET)$(if $(abi),/$(abi))
+	$(NVCC) $(INCLUDES)  $(ALL_LDFLAGS) -o $@ $+ $(LIBRARIES)
+	mkdir -p $(TARGET_DIR)
+	cp $@ $(TARGET_DIR)
 
 run: build
 	./svm-train-gpu
 
 clean:
 	rm -f svm-train-gpu.o svm-train-gpu
-	rm -rf /bin/$(OS_ARCH)/$(OSLOWER)/$(TARGET)$(if $(abi),/$(abi))/svm-train-gpu
+	rm -rf $(TARGET_DIR)/svm-train-gpu
 
 clobber: clean
