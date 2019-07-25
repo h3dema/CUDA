@@ -7,9 +7,13 @@ GPU-accelerated LIBSVM is a modification of the [original LIBSVM](http://www.csi
 Watch a [short video](http://www.youtube.com/watch?v=Fl99tQQd55U) on the capabilities of the GPU-accelerated LIBSVM package
 
 ###CHANGELOG
-	
-V1.2 
-	
+
+V1.3
+    Updated to CUDA SDK v10.1 (only linux part)
+
+
+V1.2
+
 	Updated to LIBSVM version 3.17
 	Updated to CUDA SDK v5.5
 	Using CUBLAS_V2 which is compatible with the CUDA SDK v4.0 and up.
@@ -29,7 +33,7 @@ Functionality / User interface
     LIBSVM prerequisites
     NVIDIA Graphics card with CUDA support
     Latest NVIDIA drivers for GPU
-	
+
 ### PERFORMANCE COMPARISON
 
 To showcase the performance gain using the GPU-accelerated LIBSVM we present an example run.
@@ -56,11 +60,11 @@ Classification parameters
 
 Discussion
 
-    GPU-accelerated LIBSVM gives a performance gain depending on the size of input data set. 
+    GPU-accelerated LIBSVM gives a performance gain depending on the size of input data set.
     This gain is increasing dramatically with the size of the dataset.
-    Please take into consideration input data size limitations that can occur from the memory 
-    capacity of the graphics card that is used.    
-    
+    Please take into consideration input data size limitations that can occur from the memory
+    capacity of the graphics card that is used.
+
 ### PUBLICATION
 
 A first document describing some of the work related to the GPU-Accelerated LIBSVM is the following; please cite it if you find this implementation useful in your work:

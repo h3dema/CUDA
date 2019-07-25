@@ -137,8 +137,8 @@ build: svm-train-gpu
 	@echo "Ok"
 
 svm-train.o: svm-train.c
-	$(NVCC) $(INCLUDES) -o $@ $^ -c 
-	
+	$(NVCC) $(INCLUDES) -o $@ $^ -c
+
 svm-train-gpu.o: svm.cpp svm-train.o
 	$(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 

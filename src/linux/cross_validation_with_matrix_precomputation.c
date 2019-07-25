@@ -75,7 +75,7 @@ double do_crossvalidation(struct svm_problem * p_km)
 			}
 			free(target);
 
-			
+
 			return rate;
 
 }
@@ -100,7 +100,7 @@ void run_pair(struct svm_problem * p_km)
 void do_cross_validation_with_KM_precalculated(   )
 {
 	struct svm_problem p_km;
-	
+
 	setup_pkm(&p_km );
 
 	run_pair( &p_km);
