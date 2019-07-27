@@ -1,8 +1,8 @@
 authorName: h3dema
 experimentName: libSVM-Cuda
-trialConcurrency: 1
-maxExecDuration: 24h
-maxTrialNum: 1
+trialConcurrency: 3
+maxExecDuration: 500h
+maxTrialNum: 30
 trainingServicePlatform: local
 searchSpacePath: svr-search_space.json
 useAnnotation: false
