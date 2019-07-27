@@ -2,6 +2,7 @@ import argparse
 import os
 import logging
 import subprocess
+import numpy as np
 
 import nni
 
@@ -36,6 +37,7 @@ if __name__ == "__main__":
     parser.add_argument('--output', type=str, default='output', help='output directory (results)')
 
     parser.add_argument('--executable', type=str, default='/home/winet/CUDA/src/linux/bin/svm-train-gnu', help='the executable svm-train-gnu full path')
+    parser.add_argument('--predict', type=str, default='/home/winet/CUDA/binaries/linux/svm-predict', help='the executable svm-predict full path')
 
     parser.add_argument('--epsilon', type=float, default=0.001, help='set tolerance of termination criterion')
 
@@ -64,7 +66,7 @@ if __name__ == "__main__":
     LOG.info(args)
 
     # define the parameters
-    svm_type = 4 if args['type'] == 'nu-SVR' else 3
+    svm_type = 4 if args['svm_type'] == 'nu-SVR' else 3
     kernel_types = ["linear", "polynomial", "radial basis", "sigmoid"]
     kernel_type = 2 if args['kernel_type'] not in kernel_types else kernel_types.index(args['kernel_type'])
     degree = conv_numeric(args['degree'], 3, int)
@@ -92,13 +94,29 @@ if __name__ == "__main__":
                                                                                  args['dataset'],
                                                                                  output,
                                                                                  )
+    LOG.info(cmd)
     p = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()[0]
+    stdout, stderr = p.communicate()
+    LOG.info(stdout)
 
-    lines = stdout.decode('utf-8').split('\n')
-    # find the line with the result
-    r = [_l for _l in lines if 'adobe' in _l]
-    if len(r) > 0:
-        loss = 0  # TODO read from "r" the value of the loss
-        if has_nni:
-            nni.report_final_result(loss)
+    lines = stdout.decode('utf-8')
+    if 'optimization finished' in lines:
+        # sucessfully terminated
+        predictions = os.path.join(args['output'], 'predict-{}.txt'.format(args['id']))
+        cmd = "{} {} {} {}".format(args['predict'], args['dataset'], output, predictions)
+
+        # run predictions
+        p = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+        LOG.info(stdout)
+
+        # find the line with the result
+        lines = stdout.decode('utf-8').split('\n')
+        r = [_l for _l in lines if 'Mean squared error' in _l]
+        if len(r) > 0:
+            try:
+                loss = float(r[0].split('=')[1].strip().split()[0])
+            except (ValueError, IndexError):
+                loss = np.Inf  # error
+            if has_nni:
+                nni.report_final_result(loss)
